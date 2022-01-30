@@ -25,8 +25,14 @@ static void blink_led(void *args)
     while (true) {
         turn_led_on(SLAVE_ADDRESS);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+        set_power_level(SLAVE_ADDRESS, 2);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
         turn_led_off(SLAVE_ADDRESS);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+        set_power_level(SLAVE_ADDRESS, 1);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        
     }
 }
 
