@@ -28,8 +28,7 @@
 #define NACK_VAL 0x1  
 
 
-typedef enum  {LED_ON, LED_OFF, POT1, POT2} messages_t;
-static messages_t command_send;
+command_t command;
 
 /**
  * @brief i2c master initialization
@@ -79,10 +78,9 @@ static esp_err_t read_slave(i2c_port_t i2c_num, uint8_t slave_address, uint8_t *
 
 void turn_led_on(uint8_t slave_address)
 {
-    command_send = LED_ON;
 
     ESP_LOGI("TESTE", "Turning LED on");
-    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, 0);
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LED_ON);
 
     if (ret == ESP_ERR_TIMEOUT) {
         ESP_LOGE("TESTE", "I2C Timeout on Sending");
@@ -95,9 +93,8 @@ void turn_led_on(uint8_t slave_address)
 
 void turn_led_off(uint8_t slave_address)
 {
-    command_send = LED_OFF;
     ESP_LOGI("TESTE", "Turning LED off");
-    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, 1);
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LED_OFF);
 
     if (ret == ESP_ERR_TIMEOUT) {
         ESP_LOGE("TESTE", "I2C Timeout on Sending");
@@ -112,9 +109,9 @@ void set_power_level (uint8_t slave_address, uint8_t level)
 {
     uint8_t dsend = 0;
     if (level == 1) {
-        dsend = 2;
+        dsend = POT1;
     } else if (level == 2) {
-        dsend = 3;
+        dsend = POT2;
     }
     
     ESP_LOGI("TESTE", "Setting power level: %d", level);
