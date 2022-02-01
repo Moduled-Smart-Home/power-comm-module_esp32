@@ -1,4 +1,4 @@
-typedef enum {LED_ON, LED_OFF, FAN_OFF, FAN_ON_DIR1, FAN_ON_DIR2, POT1, POT2} command_t;
+typedef enum {LED_ON, LED_OFF, FAN_OFF, FAN_ON_DIR1, FAN_ON_DIR2, POT1, POT2, POT3, POT4, POT5} command_t;
 
 esp_err_t i2c_master_init(void);
 void turn_led_on(uint8_t slave_address);

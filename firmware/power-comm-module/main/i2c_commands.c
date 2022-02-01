@@ -108,10 +108,23 @@ void turn_led_off(uint8_t slave_address)
 void set_power_level (uint8_t slave_address, uint8_t level)
 {
     uint8_t dsend = 0;
-    if (level == 1) {
-        dsend = POT1;
-    } else if (level == 2) {
-        dsend = POT2;
+    
+    switch (level) {
+        case 1:
+            dsend = POT1;
+            break;
+        case 2:
+            dsend = POT2;
+            break;
+        case 3: 
+            dsend = POT3;
+            break;
+        case 4:
+            dsend = POT4;
+            break;
+        case 5:
+            dsend = POT5;
+            break;
     }
     
     ESP_LOGI("TESTE", "Setting power level: %d", level);
@@ -130,6 +143,7 @@ void set_power_level (uint8_t slave_address, uint8_t level)
 void set_fan_on (uint8_t slave_address, uint8_t dir)
 {
     uint8_t dsend = 0;
+    
     if (dir == 1) {
         dsend = FAN_ON_DIR1;
     } else if (dir == 2) {

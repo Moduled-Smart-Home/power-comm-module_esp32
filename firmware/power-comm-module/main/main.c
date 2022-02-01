@@ -22,20 +22,25 @@ static void blink_led(void *args)
 {
     ESP_LOGI("TESTE", "Iniciando o teste...");
 
+    uint16_t interval = 2000;
+
     while (true) {
         turn_led_on(SLAVE_ADDRESS);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
         turn_led_off(SLAVE_ADDRESS);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
 
-        set_fan_on(SLAVE_ADDRESS, 1);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        set_power_level(SLAVE_ADDRESS, 2);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
         set_power_level(SLAVE_ADDRESS, 1);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        set_fan_on(SLAVE_ADDRESS, 1);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
+
+        for (int i=2; i<=5; i++) {
+            set_power_level(SLAVE_ADDRESS, i);
+            vTaskDelay(interval / portTICK_PERIOD_MS);
+        }
+        
         set_fan_off(SLAVE_ADDRESS);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
 
         
     }
