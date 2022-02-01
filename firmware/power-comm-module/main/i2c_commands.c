@@ -126,3 +126,39 @@ void set_power_level (uint8_t slave_address, uint8_t level)
         ESP_LOGE("TESTE", "Another problem");
     } 
 }
+
+void set_fan_on (uint8_t slave_address, uint8_t dir)
+{
+    uint8_t dsend = 0;
+    if (dir == 1) {
+        dsend = FAN_ON_DIR1;
+    } else if (dir == 2) {
+        dsend = FAN_ON_DIR2;
+    }
+    
+    ESP_LOGI("TESTE", "Setting fan on. Direction: %d", dir);
+
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, dsend);
+
+    if (ret == ESP_ERR_TIMEOUT) {
+        ESP_LOGE("TESTE", "I2C Timeout on Sending");
+    } else if (ret == ESP_OK) {
+        ESP_LOGI("TESTE", "Data sent.");
+    } else {
+        ESP_LOGE("TESTE", "Another problem");
+    } 
+}
+
+void set_fan_off (uint8_t slave_address)
+{
+    ESP_LOGI("TESTE", "Turning fan off");
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, FAN_OFF);
+
+    if (ret == ESP_ERR_TIMEOUT) {
+        ESP_LOGE("TESTE", "I2C Timeout on Sending");
+    } else if (ret == ESP_OK) {
+        ESP_LOGI("TESTE", "Data sent.");
+    } else {
+        ESP_LOGE("TESTE", "Another problem");
+    } 
+}
