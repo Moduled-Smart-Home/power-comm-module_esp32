@@ -176,3 +176,32 @@ void set_fan_off (uint8_t slave_address)
         ESP_LOGE("TESTE", "Another problem");
     } 
 }
+
+void set_lamp_on (uint8_t slave_address)
+{
+    ESP_LOGI("TESTE", "Setting lamp on.");
+
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LAMP_ON);
+
+    if (ret == ESP_ERR_TIMEOUT) {
+        ESP_LOGE("TESTE", "I2C Timeout on Sending");
+    } else if (ret == ESP_OK) {
+        ESP_LOGI("TESTE", "Data sent.");
+    } else {
+        ESP_LOGE("TESTE", "Another problem");
+    } 
+}
+
+void set_lamp_off (uint8_t slave_address)
+{
+    ESP_LOGI("TESTE", "Turning lamp off");
+    esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LAMP_OFF);
+
+    if (ret == ESP_ERR_TIMEOUT) {
+        ESP_LOGE("TESTE", "I2C Timeout on Sending");
+    } else if (ret == ESP_OK) {
+        ESP_LOGI("TESTE", "Data sent.");
+    } else {
+        ESP_LOGE("TESTE", "Another problem");
+    } 
+}

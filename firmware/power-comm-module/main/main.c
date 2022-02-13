@@ -51,6 +51,12 @@ static void blink_led(void *args)
             set_power_level(SLAVE_ADDRESS, i);
             vTaskDelay(interval / portTICK_PERIOD_MS);
         }
+
+        set_lamp_on(SLAVE_ADDRESS);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
+
+        set_lamp_off(SLAVE_ADDRESS);
+        vTaskDelay(interval / portTICK_PERIOD_MS);
         
     }
 }
