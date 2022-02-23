@@ -13,16 +13,21 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
+#include "esp_wifi.h"
 
 #include "i2c_commands.h"
+#include "wifi.c"
+#include "rest_server.c"
 
-#define SLAVE_ADDRESS 0xAA
+#define SLAVE_ADDRESS CONFIG_SLAVE_ADDRESS
 
-static void blink_led(void *args)
+#define WEB_MOUNT_POINT "/web"
+
+static void test_i2c_comm(void *args)
 {
     ESP_LOGI("TESTE", "Iniciando o teste...");
 
-        uint16_t interval = 1000;
+        uint16_t interval = 2000;
 
     while (true) {
         turn_led_on(SLAVE_ADDRESS);
@@ -30,12 +35,12 @@ static void blink_led(void *args)
         turn_led_off(SLAVE_ADDRESS);
         vTaskDelay(interval / portTICK_PERIOD_MS);
 
-        set_power_level(SLAVE_ADDRESS, 1);
+        set_fan_power(SLAVE_ADDRESS, 1);
         set_fan_on(SLAVE_ADDRESS, 1);
         vTaskDelay(interval / portTICK_PERIOD_MS);
 
         for (int i=2; i<=5; i++) {
-            set_power_level(SLAVE_ADDRESS, i);
+            set_fan_power(SLAVE_ADDRESS, i);
             vTaskDelay(interval / portTICK_PERIOD_MS);
         }
         
@@ -43,12 +48,12 @@ static void blink_led(void *args)
         vTaskDelay(interval / portTICK_PERIOD_MS);
 
 
-        set_power_level(SLAVE_ADDRESS, 1);
+        set_fan_power(SLAVE_ADDRESS, 1);
         set_fan_on(SLAVE_ADDRESS, 2);
         vTaskDelay(interval / portTICK_PERIOD_MS);
 
         for (int i=2; i<=5; i++) {
-            set_power_level(SLAVE_ADDRESS, i);
+            set_fan_power(SLAVE_ADDRESS, i);
             vTaskDelay(interval / portTICK_PERIOD_MS);
         }
 
@@ -79,9 +84,24 @@ void app_main(void)
 
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
+
+    //Initialize NVS
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    ESP_LOGI("WiFi", "ESP_WIFI_MODE_STA");
+    wifi_init_sta();
+
+
     TaskHandle_t task_handle = NULL;
 
     ESP_ERROR_CHECK(i2c_master_init());
-    xTaskCreate(blink_led, "blink_led", 2048, NULL, 5, &task_handle);
+
+    ESP_ERROR_CHECK(start_rest_server(WEB_MOUNT_POINT));
+    // xTaskCreate(test_i2c_comm, "test_i2c_comm", 2048, NULL, 5, &task_handle);
 
 }

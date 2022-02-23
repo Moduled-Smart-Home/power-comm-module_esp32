@@ -76,7 +76,7 @@ static esp_err_t read_slave(i2c_port_t i2c_num, uint8_t slave_address, uint8_t *
     return ret;
 }
 
-void turn_led_on(uint8_t slave_address)
+esp_err_t turn_led_on(uint8_t slave_address)
 {
 
     ESP_LOGI("TESTE", "Turning LED on");
@@ -89,9 +89,11 @@ void turn_led_on(uint8_t slave_address)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
 }
 
-void turn_led_off(uint8_t slave_address)
+esp_err_t turn_led_off(uint8_t slave_address)
 {
     ESP_LOGI("TESTE", "Turning LED off");
     esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LED_OFF);
@@ -103,9 +105,11 @@ void turn_led_off(uint8_t slave_address)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
 }
 
-void set_power_level (uint8_t slave_address, uint8_t level)
+esp_err_t set_fan_power (uint8_t slave_address, uint8_t level)
 {
     uint8_t dsend = 0;
     
@@ -138,9 +142,11 @@ void set_power_level (uint8_t slave_address, uint8_t level)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
 }
 
-void set_fan_on (uint8_t slave_address, uint8_t dir)
+esp_err_t set_fan_on (uint8_t slave_address, uint8_t dir)
 {
     uint8_t dsend = 0;
     
@@ -161,9 +167,11 @@ void set_fan_on (uint8_t slave_address, uint8_t dir)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
 }
 
-void set_fan_off (uint8_t slave_address)
+esp_err_t set_fan_off (uint8_t slave_address)
 {
     ESP_LOGI("TESTE", "Turning fan off");
     esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, FAN_OFF);
@@ -175,9 +183,11 @@ void set_fan_off (uint8_t slave_address)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
 }
 
-void set_lamp_on (uint8_t slave_address)
+esp_err_t set_lamp_on (uint8_t slave_address)
 {
     ESP_LOGI("TESTE", "Setting lamp on.");
 
@@ -190,9 +200,12 @@ void set_lamp_on (uint8_t slave_address)
     } else {
         ESP_LOGE("TESTE", "Another problem");
     } 
+
+    return ret;
+
 }
 
-void set_lamp_off (uint8_t slave_address)
+esp_err_t set_lamp_off (uint8_t slave_address)
 {
     ESP_LOGI("TESTE", "Turning lamp off");
     esp_err_t ret = write_slave(I2C_MASTER_NUM, slave_address, LAMP_OFF);
@@ -203,5 +216,7 @@ void set_lamp_off (uint8_t slave_address)
         ESP_LOGI("TESTE", "Data sent.");
     } else {
         ESP_LOGE("TESTE", "Another problem");
-    } 
+    }
+
+    return ret;
 }
