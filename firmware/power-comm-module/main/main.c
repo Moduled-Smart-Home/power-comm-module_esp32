@@ -20,7 +20,6 @@
 #include "esp_netif.h"
 #include "esp_event.h"
 
-#include "mdns.h"
 #include "lwip/apps/netbiosns.h"
 #include "mdns.h"
 #include "lwip/apps/netbiosns.h"
@@ -29,6 +28,7 @@
 #include "i2c_commands.h"
 #include "wifi.c"
 #include "rest_server.c"
+#include "ota.c"
 
 #define SLAVE_ADDRESS CONFIG_SLAVE_ADDRESS
 
@@ -156,8 +156,6 @@ void app_main(void)
     wifi_init_sta();
 
 
-    TaskHandle_t task_handle = NULL;
-
     ESP_ERROR_CHECK(i2c_master_init());
 
     ESP_ERROR_CHECK(nvs_flash_init());
@@ -167,8 +165,12 @@ void app_main(void)
     // netbiosns_init();
     // netbiosns_set_name(MDNS_HOST_NAME);
 
+    // OTA TEST START
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    start_ota_verification();
+    // OTA TEST END
+
     ESP_ERROR_CHECK(init_fs());
     ESP_ERROR_CHECK(start_rest_server(WEB_MOUNT_POINT));
-    // xTaskCreate(test_i2c_comm, "test_i2c_comm", 2048, NULL, 5, &task_handle);
 
 }
