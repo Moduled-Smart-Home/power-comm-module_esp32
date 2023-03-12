@@ -1,0 +1,4 @@
+[submodule "firmware/power-comm-module/esp-idf"]
+	path = firmware/power-comm-module/esp-idf
+	url = https://github.com/espressif/esp-idf.git
+	branch = v4.4.4
