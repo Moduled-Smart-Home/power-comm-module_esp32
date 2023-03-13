@@ -260,7 +260,7 @@ static esp_err_t fan_pow_post_handler(httpd_req_t *req)
     }
 }
 
-static esp_err_t ota_get_handler(httpd_req_t *req) {
+static esp_err_t ota_post_handler(httpd_req_t *req) {
     esp_err_t ret = ota_update();
     if (ret == ESP_OK) {
         httpd_resp_sendstr(req, "Firmware upgraded!");
@@ -326,13 +326,13 @@ esp_err_t start_rest_server(const char *base_path)
     httpd_register_uri_handler(server, &fan_pow_post_uri);
 
     /* URI handler for OTA Update */
-    httpd_uri_t ota_get_uri = {
+    httpd_uri_t ota_post_uri = {
         .uri = "/api/upgrade_firmware",
-        .method = HTTP_GET,
-        .handler = ota_get_handler,
+        .method = HTTP_POST,
+        .handler = ota_post_handler,
         .user_ctx = rest_context
     };
-    httpd_register_uri_handler(server, &ota_get_uri);
+    httpd_register_uri_handler(server, &ota_post_uri);
 
     return ESP_OK;
 err_start:
