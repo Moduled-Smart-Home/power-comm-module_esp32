@@ -28,7 +28,6 @@
 #include "i2c_commands.h"
 #include "wifi.c"
 #include "rest_server.c"
-#include "ota.c"
 
 #define SLAVE_ADDRESS CONFIG_SLAVE_ADDRESS
 
@@ -164,11 +163,6 @@ void app_main(void)
     initialise_mdns();
     // netbiosns_init();
     // netbiosns_set_name(MDNS_HOST_NAME);
-
-    // OTA TEST START
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-    start_ota_verification();
-    // OTA TEST END
 
     ESP_ERROR_CHECK(init_fs());
     ESP_ERROR_CHECK(start_rest_server(WEB_MOUNT_POINT));

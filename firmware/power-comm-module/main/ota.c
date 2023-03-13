@@ -53,10 +53,9 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-// void simple_ota_example_task(void *pvParameter)
-void simple_ota_example_task(void)
+static esp_err_t ota_update(void)
 {
-    ESP_LOGI(TAG_OTA, "Starting OTA example 2");
+    ESP_LOGI(TAG_OTA, "Starting OTA");
     esp_http_client_config_t config = {
         .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
         .cert_pem = (char *)server_cert_pem_start,
@@ -71,14 +70,11 @@ void simple_ota_example_task(void)
 
     esp_err_t ret = esp_https_ota(&config);
     if (ret == ESP_OK) {
-        ESP_LOGI(TAG_OTA, "Firmware upgraded successfuly!");
-        return;
-        // esp_restart();
+        ESP_LOGI(TAG_OTA, "Firmware upgraded! Restarting...");       
+        return ESP_OK;
     } else {
         ESP_LOGE(TAG_OTA, "Firmware upgrade failed");
-    }
-    while (1) {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        return ESP_FAIL;
     }
 }
 
@@ -113,6 +109,5 @@ static void start_ota_verification(void)
 {
     get_sha256_of_partitions();
 
-    simple_ota_example_task();
-    // xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+    ota_update();
 }
