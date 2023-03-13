@@ -70,7 +70,7 @@ static esp_err_t ota_update(void)
 
     esp_err_t ret = esp_https_ota(&config);
     if (ret == ESP_OK) {
-        ESP_LOGI(TAG_OTA, "Firmware upgraded! Restarting...");       
+        ESP_LOGI(TAG_OTA, "Firmware upgraded!");       
         return ESP_OK;
     } else {
         ESP_LOGE(TAG_OTA, "Firmware upgrade failed");

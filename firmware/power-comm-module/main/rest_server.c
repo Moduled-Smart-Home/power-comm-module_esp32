@@ -264,6 +264,7 @@ static esp_err_t ota_post_handler(httpd_req_t *req) {
     esp_err_t ret = ota_update();
     if (ret == ESP_OK) {
         httpd_resp_sendstr(req, "Firmware upgraded!");
+        esp_restart();
         return ESP_OK;
     }
     else {
