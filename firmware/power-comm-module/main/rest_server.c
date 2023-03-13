@@ -40,6 +40,7 @@ typedef struct rest_server_context {
 
 #define CHECK_FILE_EXTENSION(filename, ext) (strcasecmp(&filename[strlen(filename) - strlen(ext)], ext) == 0)
 
+
 /* Set HTTP response content type according to file extension */
 static esp_err_t set_content_type_from_file(httpd_req_t *req, const char *filepath)
 {
@@ -264,6 +265,7 @@ static esp_err_t ota_post_handler(httpd_req_t *req) {
     esp_err_t ret = ota_update();
     if (ret == ESP_OK) {
         httpd_resp_sendstr(req, "Firmware upgraded!");
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
         esp_restart();
         return ESP_OK;
     }
