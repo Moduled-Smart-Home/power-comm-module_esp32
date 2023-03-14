@@ -14,6 +14,7 @@
 #include "esp_vfs.h"
 #include "cJSON.h"
 #include "ota.c"
+#include "esp_ota_ops.h"
 
 #include "i2c_commands.h"
 
@@ -275,6 +276,13 @@ static esp_err_t ota_post_handler(httpd_req_t *req) {
     }
 }
 
+static esp_err_t app_versin_get_handler(httpd_req_t *req) {
+    esp_app_desc_t *app_info = esp_ota_get_app_description();
+    char * str_resp = strcat("App Version: ", app_info->version);
+    httpd_resp_sendstr(req, str_resp);
+    return ESP_OK;
+}
+
 esp_err_t start_rest_server(const char *base_path)
 {
 
@@ -291,15 +299,6 @@ esp_err_t start_rest_server(const char *base_path)
     REST_CHECK(httpd_start(&server, &config) == ESP_OK, "Start server failed", err_start);
 
     /* URI handler for fetching system info */
-
-    /* URI handler for getting web server files */
-    httpd_uri_t common_get_uri = {
-        .uri = "/*",
-        .method = HTTP_GET,
-        .handler = rest_common_get_handler,
-        .user_ctx = rest_context
-    };
-    httpd_register_uri_handler(server, &common_get_uri);
    
     /* URI handler for lamp control */
     httpd_uri_t lamp_on_off_post_uri = {
@@ -336,6 +335,24 @@ esp_err_t start_rest_server(const char *base_path)
         .user_ctx = rest_context
     };
     httpd_register_uri_handler(server, &ota_post_uri);
+    
+    /* URI handler for get App Version */
+    httpd_uri_t app_version_get_uri = {
+        .uri = "/api/app_version",
+        .method = HTTP_GET,
+        .handler = app_versin_get_handler,
+        .user_ctx = rest_context
+    };
+    httpd_register_uri_handler(server, &app_version_get_uri);
+
+    /* URI handler for getting web server files */
+    httpd_uri_t common_get_uri = {
+        .uri = "/*",
+        .method = HTTP_GET,
+        .handler = rest_common_get_handler,
+        .user_ctx = rest_context
+    };
+    httpd_register_uri_handler(server, &common_get_uri);
 
     return ESP_OK;
 err_start:
