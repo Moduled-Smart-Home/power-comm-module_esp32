@@ -276,10 +276,8 @@ static esp_err_t ota_post_handler(httpd_req_t *req) {
     }
 }
 
-static esp_err_t app_versin_get_handler(httpd_req_t *req) {
-    esp_app_desc_t *app_info = esp_ota_get_app_description();
-    char * str_resp = strcat("App Version: ", app_info->version);
-    httpd_resp_sendstr(req, str_resp);
+static esp_err_t app_version_get_handler(httpd_req_t *req) {
+    httpd_resp_sendstr(req, esp_ota_get_app_description()->version);
     return ESP_OK;
 }
 
@@ -340,7 +338,7 @@ esp_err_t start_rest_server(const char *base_path)
     httpd_uri_t app_version_get_uri = {
         .uri = "/api/app_version",
         .method = HTTP_GET,
-        .handler = app_versin_get_handler,
+        .handler = app_version_get_handler,
         .user_ctx = rest_context
     };
     httpd_register_uri_handler(server, &app_version_get_uri);
