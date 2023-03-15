@@ -15,6 +15,8 @@
 #include "cJSON.h"
 #include "ota.c"
 #include "esp_ota_ops.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
 
 #include "i2c_commands.h"
 
@@ -262,12 +264,25 @@ static esp_err_t fan_pow_post_handler(httpd_req_t *req)
     }
 }
 
+static void vTimerCallback( TimerHandle_t pxTimer ) {
+    ESP_LOGI(REST_TAG, "Restarting ESP...");
+    esp_restart();
+}
+
 static esp_err_t ota_post_handler(httpd_req_t *req) {
     esp_err_t ret = ota_update();
     if (ret == ESP_OK) {
         httpd_resp_sendstr(req, "Firmware upgraded!");
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
-        esp_restart();
+        
+        TimerHandle_t timer =  xTimerCreate("Timer_to_restart", (5000 / portTICK_PERIOD_MS), pdFALSE, "timer1",  vTimerCallback);
+
+        if (timer == NULL) {
+            ESP_LOGI(REST_TAG, "Timer for restart NOT created");
+        } else {
+            xTimerStart(timer, 0);
+        }
+        // vTaskDelay(5000 / portTICK_PERIOD_MS);
+        // esp_restart();
         return ESP_OK;
     }
     else {
