@@ -172,7 +172,7 @@ CONFIG_SLAVE_ADDRESS=170
 #
 # OTA Configuration
 #
-CONFIG_FIRMWARE_UPGRADE_URL="https://192.168.100.10:8070/power-comm-module.bin"
+CONFIG_FIRMWARE_UPGRADE_URL="https://raw.githubusercontent.com/Moduled-Smart-Home/power-comm-module_esp32/develop/firmware/power-comm-module/ota_dist/power-comm-module.bin"
 # CONFIG_SKIP_COMMON_NAME_CHECK is not set
 # end of OTA Configuration
 # end of Application Configuration
