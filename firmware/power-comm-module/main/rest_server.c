@@ -281,14 +281,18 @@ static esp_err_t ota_post_handler(httpd_req_t *req) {
         } else {
             xTimerStart(timer, 0);
         }
-        // vTaskDelay(5000 / portTICK_PERIOD_MS);
-        // esp_restart();
         return ESP_OK;
     }
     else {
         httpd_resp_sendstr(req, "Something gets wrong during firmware upgrading!");
         return ESP_FAIL;
     }
+}
+
+static esp_err_t ota_rollback_handler(httpd_req_t *req) {
+    httpd_resp_sendstr(req, "Rolling back and rebooting!");
+    esp_ota_mark_app_invalid_rollback_and_reboot();
+    return ESP_OK;
 }
 
 static esp_err_t app_version_get_handler(httpd_req_t *req) {
@@ -348,6 +352,15 @@ esp_err_t start_rest_server(const char *base_path)
         .user_ctx = rest_context
     };
     httpd_register_uri_handler(server, &ota_post_uri);
+    
+    /* URI handler for OTA Rollback */
+    httpd_uri_t ota_rollback_uri = {
+        .uri = "/api/firmware_rollback",
+        .method = HTTP_POST,
+        .handler = ota_rollback_handler,
+        .user_ctx = rest_context
+    };
+    httpd_register_uri_handler(server, &ota_rollback_uri);
     
     /* URI handler for get App Version */
     httpd_uri_t app_version_get_uri = {
