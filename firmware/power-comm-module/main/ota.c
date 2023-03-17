@@ -57,14 +57,14 @@ static esp_err_t ota_update(void)
 {
     ESP_LOGI(TAG_OTA, "Starting OTA");
     esp_http_client_config_t config = {
-        .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
+        .url = CONFIG_FIRMWARE_UPGRADE_URL,
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
         .keep_alive_enable = true,
     };
 
 
-#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
+#ifdef CONFIG_SKIP_COMMON_NAME_CHECK
     config.skip_cert_common_name_check = true;
 #endif
 

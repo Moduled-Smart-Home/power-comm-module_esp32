@@ -142,6 +142,10 @@ void app_main(void)
 
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
+    // if(esp_ota_get_state_partition() == ESP_OTA_IMG_PENDING_VERIFY) {
+    //     ESP_LOGI("START UP", "Marking app as valid and cancelling rollback");
+    //     esp_ota_mark_app_valid_cancel_rollback();
+    // }
 
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
