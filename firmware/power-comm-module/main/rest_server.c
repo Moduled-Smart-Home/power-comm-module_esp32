@@ -42,6 +42,33 @@ typedef struct rest_server_context
     char scratch[SCRATCH_BUFSIZE];
 } rest_server_context_t;
 
+static esp_err_t read_req_content(httpd_req_t *req, char **content) {
+    int total_len = req->content_len;
+    int cur_len = 0;
+    char *buf = ((rest_server_context_t *)(req->user_ctx))->scratch;
+    int received = 0;
+    if (total_len >= SCRATCH_BUFSIZE)
+    {
+        /* Respond with 500 Internal Server Error */
+        httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "content too long");
+        return ESP_FAIL;
+    }
+    while (cur_len < total_len)
+    {
+        received = httpd_req_recv(req, buf + cur_len, total_len);
+        if (received <= 0)
+        {
+            /* Respond with 500 Internal Server Error */
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to post control value");
+            return ESP_FAIL;
+        }
+        cur_len += received;
+    }
+    buf[total_len] = '\0';
+    *content = buf;
+    return ESP_OK;
+}
+
 #define CHECK_FILE_EXTENSION(filename, ext) (strcasecmp(&filename[strlen(filename) - strlen(ext)], ext) == 0)
 
 /* Set HTTP response content type according to file extension */
@@ -137,35 +164,17 @@ static esp_err_t rest_common_get_handler(httpd_req_t *req)
 /* handler for lamp control */
 static esp_err_t lamp_on_off_post_handler(httpd_req_t *req)
 {
-    int total_len = req->content_len;
-    int cur_len = 0;
-    char *buf = ((rest_server_context_t *)(req->user_ctx))->scratch;
-    int received = 0;
-    char *stateTxt;
-    if (total_len >= SCRATCH_BUFSIZE)
-    {
-        /* Respond with 500 Internal Server Error */
-        httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "content too long");
+    char *content;
+    if(read_req_content(req, &content) != ESP_OK){
         return ESP_FAIL;
     }
-    while (cur_len < total_len)
-    {
-        received = httpd_req_recv(req, buf + cur_len, total_len);
-        if (received <= 0)
-        {
-            /* Respond with 500 Internal Server Error */
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to post control value");
-            return ESP_FAIL;
-        }
-        cur_len += received;
-    }
-    buf[total_len] = '\0';
 
-    cJSON *root = cJSON_Parse(buf);
+    cJSON *root = cJSON_Parse(content);
     int state = cJSON_GetObjectItem(root, "state")->valueint;
 
-    esp_err_t ret;
+    char *stateTxt;
 
+    esp_err_t ret;
     if (state == 0)
     {
         stateTxt = "OFF";
@@ -197,30 +206,12 @@ static esp_err_t lamp_on_off_post_handler(httpd_req_t *req)
 /* handler for fan dir control */
 static esp_err_t fan_on_dir_off_post_handler(httpd_req_t *req)
 {
-    int total_len = req->content_len;
-    int cur_len = 0;
-    char *buf = ((rest_server_context_t *)(req->user_ctx))->scratch;
-    int received = 0;
-    if (total_len >= SCRATCH_BUFSIZE)
-    {
-        /* Respond with 500 Internal Server Error */
-        httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "content too long");
+    char *content;
+    if(read_req_content(req, &content) != ESP_OK){
         return ESP_FAIL;
     }
-    while (cur_len < total_len)
-    {
-        received = httpd_req_recv(req, buf + cur_len, total_len);
-        if (received <= 0)
-        {
-            /* Respond with 500 Internal Server Error */
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to post control value");
-            return ESP_FAIL;
-        }
-        cur_len += received;
-    }
-    buf[total_len] = '\0';
 
-    cJSON *root = cJSON_Parse(buf);
+    cJSON *root = cJSON_Parse(content);
     int state = cJSON_GetObjectItem(root, "state")->valueint;
     int dir = cJSON_GetObjectItem(root, "dir")->valueint;
 
