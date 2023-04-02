@@ -20,7 +20,6 @@
 #include "esp_netif.h"
 #include "esp_event.h"
 
-#include "mdns.h"
 #include "lwip/apps/netbiosns.h"
 #include "mdns.h"
 #include "lwip/apps/netbiosns.h"
@@ -143,6 +142,12 @@ void app_main(void)
 
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
+    esp_ota_img_states_t ota_state = ESP_OTA_IMG_UNDEFINED;
+    esp_ota_get_state_partition(esp_ota_get_running_partition(), &ota_state);
+    if(ota_state == ESP_OTA_IMG_PENDING_VERIFY) {
+        ESP_LOGI("START UP", "Marking app as valid and cancelling rollback");
+        esp_ota_mark_app_valid_cancel_rollback();
+    }
 
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
@@ -156,8 +161,6 @@ void app_main(void)
     wifi_init_sta();
 
 
-    TaskHandle_t task_handle = NULL;
-
     ESP_ERROR_CHECK(i2c_master_init());
 
     ESP_ERROR_CHECK(nvs_flash_init());
@@ -169,6 +172,5 @@ void app_main(void)
 
     ESP_ERROR_CHECK(init_fs());
     ESP_ERROR_CHECK(start_rest_server(WEB_MOUNT_POINT));
-    // xTaskCreate(test_i2c_comm, "test_i2c_comm", 2048, NULL, 5, &task_handle);
 
 }
