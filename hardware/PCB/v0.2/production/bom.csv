@@ -1,0 +1,13 @@
+Designator,Footprint,Quantity,Value,LCSC Part #
+C1,CP_EIA-3216-18_Kemet-A_Pad1.58x1.35mm_HandSolder,1,22uF,
+"C2, C3",0805,2,0.1uF,
+"J1, J3, J5",KF3012P,3,Screw_Terminal_01x02,
+J2,PinHeader_1x06_P2.00mm_Vertical,1,Conn_01x06_Pin,
+J4,PinSocket_1x05_P2.54mm_Horizontal,1,Conn_01x04_Socket,
+K1,HF49FD0051H22G,1,HF49FD_005-1H22G,
+PS1,HLKPM01,1,HLK-PM01,
+Q1,SOT-23,1,S8050,
+"R1, R2, R3, R4",0805,4,10K,
+SW1,SW_PUSH_6mm_H4.3mm,1,SW_DIP_x01,
+U1,SOT-223-3_TabPin2,1,AMS1117-3.3,
+U2,ESP32s,1,ESP-32s,
