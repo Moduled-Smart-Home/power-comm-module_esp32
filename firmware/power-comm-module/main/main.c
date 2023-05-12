@@ -151,7 +151,8 @@ void app_main(void)
 
     //Configure IOs
     gpio_set_direction(GPIO_NUM_19, GPIO_MODE_OUTPUT);
-    gpio_set_pull_mode(GPIO_NUM_19, GPIO_PULLUP_ENABLE);
+    gpio_set_pull_mode(GPIO_NUM_19, GPIO_PULLUP_DISABLE);
+    
 
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
