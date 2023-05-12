@@ -12,6 +12,7 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_vfs.h"
+#include "driver/gpio.h"
 #include "cJSON.h"
 #include "ota.c"
 #include "esp_ota_ops.h"
@@ -178,13 +179,15 @@ static esp_err_t lamp_on_off_post_handler(httpd_req_t *req)
     if (state == 0)
     {
         stateTxt = "OFF";
-        ret = set_lamp_off(SLAVE_ADDRESS);
+        // ret = set_lamp_off(SLAVE_ADDRESS);
+        ret = gpio_set_level(GPIO_NUM_19, 0);
     }
 
     else
     {
         stateTxt = "ON";
-        ret = set_lamp_on(SLAVE_ADDRESS);
+        // ret = set_lamp_on(SLAVE_ADDRESS);
+        ret = gpio_set_level(GPIO_NUM_19, 1);
     }
 
     if (ret == ESP_OK)

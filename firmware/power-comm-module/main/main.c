@@ -149,6 +149,10 @@ void app_main(void)
         esp_ota_mark_app_valid_cancel_rollback();
     }
 
+    //Configure IOs
+    gpio_set_direction(GPIO_NUM_19, GPIO_MODE_OUTPUT);
+    gpio_set_pull_mode(GPIO_NUM_19, GPIO_PULLUP_ENABLE);
+
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
