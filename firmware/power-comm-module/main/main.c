@@ -152,7 +152,6 @@ void app_main(void)
     //Configure IOs
     gpio_set_direction(GPIO_NUM_19, GPIO_MODE_OUTPUT);
     gpio_set_level(GPIO_NUM_19, 0);
-    
     gpio_set_direction(GPIO_NUM_23, GPIO_MODE_INPUT);
     gpio_pullup_en(GPIO_NUM_23);
 
