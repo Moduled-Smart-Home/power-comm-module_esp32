@@ -145,13 +145,13 @@ void app_main(void)
     esp_ota_img_states_t ota_state = ESP_OTA_IMG_UNDEFINED;
     esp_ota_get_state_partition(esp_ota_get_running_partition(), &ota_state);
     if(ota_state == ESP_OTA_IMG_PENDING_VERIFY) {
-        ESP_LOGI("START UP", "Marking app as valid and cancelling rollback");
+        ESP_LOGI("START UP", "Marking app as valid and cancelling rollback");\
         esp_ota_mark_app_valid_cancel_rollback();
     }
 
     //Configure IOs
     gpio_set_direction(GPIO_NUM_19, GPIO_MODE_OUTPUT);
-    gpio_set_pull_mode(GPIO_NUM_19, GPIO_PULLUP_DISABLE);
+    gpio_set_level(GPIO_NUM_19, 0);
     
 
     //Initialize NVS
