@@ -296,6 +296,18 @@ static esp_err_t fan_pow_post_handler(httpd_req_t *req)
     }
 }
 
+static esp_err_t switch_state_get_handler(httpd_req_t *req)
+{
+    char response[4];
+    int state = gpio_get_level(GPIO_NUM_23);
+    if (state == 0) strcpy(response,"ON");
+    else strcpy(response,"OFF");
+
+    ESP_LOGI(REST_TAG, "State: %s", response);
+    httpd_resp_sendstr(req, response);
+    return ESP_OK;
+}
+
 static void vTimerCallback(TimerHandle_t pxTimer)
 {
     ESP_LOGI(REST_TAG, "Restarting ESP...");
@@ -410,6 +422,14 @@ esp_err_t start_rest_server(const char *base_path)
         .handler = fan_pow_post_handler,
         .user_ctx = rest_context};
     httpd_register_uri_handler(server, &fan_pow_post_uri);
+
+    /* URI handler for get Switch State */
+    httpd_uri_t switch_state_get_uri = {
+        .uri = "/api/switch_state",
+        .method = HTTP_GET,
+        .handler = switch_state_get_handler,
+        .user_ctx = rest_context};
+    httpd_register_uri_handler(server, &switch_state_get_uri);
 
     /* URI handler for OTA Update */
     httpd_uri_t ota_post_uri = {
