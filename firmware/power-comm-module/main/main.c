@@ -154,9 +154,7 @@ void app_main(void)
     gpio_set_level(GPIO_NUM_19, 0);
     gpio_set_direction(GPIO_NUM_23, GPIO_MODE_INPUT);
     gpio_pullup_en(GPIO_NUM_23);
-    gpio_pullup_en(GPIO_NUM_32);
-    gpio_pullup_en(GPIO_NUM_33);
-
+    
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
