@@ -28,6 +28,7 @@
 #include "i2c_commands.h"
 #include "wifi.c"
 #include "rest_server.c"
+#include "modules/native/switch_commands.h"
 
 #define SLAVE_ADDRESS CONFIG_SLAVE_ADDRESS
 
@@ -152,8 +153,7 @@ void app_main(void)
     //Configure IOs
     gpio_set_direction(GPIO_NUM_19, GPIO_MODE_OUTPUT);
     gpio_set_level(GPIO_NUM_19, 0);
-    gpio_set_direction(GPIO_NUM_23, GPIO_MODE_INPUT);
-    gpio_pullup_en(GPIO_NUM_23);
+    
     
     //Initialize NVS
     esp_err_t ret = nvs_flash_init();
@@ -178,5 +178,7 @@ void app_main(void)
 
     ESP_ERROR_CHECK(init_fs());
     ESP_ERROR_CHECK(start_rest_server(WEB_MOUNT_POINT));
+
+    initialize_switch_commands();
 
 }

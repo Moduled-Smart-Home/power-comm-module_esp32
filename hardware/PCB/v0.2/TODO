@@ -1,20 +1,22 @@
 OK - Substituir alguns GNDs por vias no front side
-Conferir tamanho do capacitor tantalo
+Ok - Conferir tamanho do capacitor tantalo
 Simular circuito
-Testar gravaćão em modulo isolado com FTDI
+OK - Testar gravaćão em modulo isolado com FTDI
 OK - Definir se Alimenta slaves e interruptores com 3 ou 5V
 Arrumar textos silkscreen
 
+Após segunda tentativa
+- AJustar footprint do transistor, ficou invertido
+- Reduzir valor do resistor que aciona o transistor, ficou muito alto com 10k, não acionando o rele
+- Reavaliar valor de resistores pullup do i2c
 
 Após primeira tentativa
-- Refazer todo o ESP32, ficou invertido!!!
-- Acertar footprint do rele
-- Acertar footprint dos pinos, não está com 2.54mm
-- Ajustar tamanhos furos
-- Entender pq alguns thermal reliefs estão diferentes, como por exemplo o do pad do GND do ESP32
-- O terminal de entrada AC da rede ficou do lado oposto do conector
-- Vias ficaram muito pequenas para fazer na CNC, aumentar o diametro
-- Talvez testar usar v-bit de 90 com overlap maior, ver como ficam as passadas. Se for usar v-bit 20 aumentar overlap, foi usado 30% dessa vez, talvez 50 ou 60.
+OK - Acertar footprint do rele
+Ok - Acertar footprint dos pinos, não está com 2.54mm
+OK - Ajustar tamanhos furos
+Ok - O terminal de entrada AC da rede ficou do lado oposto do conector
+Ok - Vias ficaram muito pequenas para fazer na CNC, aumentar o diametro
+Ok - Talvez testar usar v-bit de 90 com overlap maior, ver como ficam as passadas. Se for usar v-bit 20 aumentar overlap, foi usado 30% dessa vez, talvez 50 ou 60.
 
 
 Pensamento para probe de centro (testar antes como já funciona no bCNC)
@@ -22,3 +24,4 @@ Pensamento para probe de centro (testar antes como já funciona no bCNC)
 - Vai até dar contato para pegar um ponto central, recua um pouco (distancia pode ser funćão de algo) entõ encontra pontos à esquerda e direita pra entender em que ponto está da curva.
 - Calcula melhor sugestão para novo ponto central. À medida que vai chegando perto, vai reduzindo velocidade e distancia pra obter precisão
 - Apos estabelecido um fundo, encontra as distancias e assim o centro.
+

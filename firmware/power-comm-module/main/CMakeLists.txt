@@ -1,4 +1,4 @@
-idf_component_register(SRCS "i2c_commands.c" "rest_server.c" "wifi.c" "ota.c" "main.c"
+idf_component_register(SRCS "i2c_commands.c" "rest_server.c" "wifi.c" "ota.c" "modules/native/switch_commands.c" "main.c" 
                     INCLUDE_DIRS "."
                     EMBED_TXTFILES ${project_dir}/server_certs/ca_cert.pem)
 
